@@ -5,6 +5,7 @@ import UserList from './components/UserList';
 import HomePage from './components/HomePage';
 import CategoryList from './components/CategoryList';
 import BrandsList from './components/BrandsList';
+import OrderList from './components/OrderList';
 
 function App() {
   const router = createBrowserRouter(
@@ -28,6 +29,10 @@ function App() {
           {
             path: '/brands',
             element: <BrandsList />
+          },
+          {
+            path: '/orders',
+            element: <OrderList />
           },
         ]
       },

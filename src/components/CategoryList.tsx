@@ -1,40 +1,46 @@
-import { useQuery } from "@tanstack/react-query";
-import { Table } from "antd";
-import Header from "../layouts/Header";
+import React from 'react';
+import { Table, Typography } from 'antd';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
-function CategoryList() {
-  const fetchCategories = async () => {
-    const res = await fetch("http://localhost:3001/categories");
-    return res.json();
-  };
+interface Category {
+  id: number;
+  name: string;
+  description?: string;
+}
 
-  const { data, isLoading } = useQuery({
+const fetchCategories = async (): Promise<Category[]> => {
+  const { data } = await axios.get("http://localhost:3001/categories");
+  return data;
+};
+
+const CategoryManager: React.FC = () => {
+  const {
+    data: categories,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
   });
 
-  const columns = [
-    {
-      title: "So thu tu",
-      dataIndex: "id",
-    },
-    {
-      title: "Ten danh muc",
-      dataIndex: "name",
-    },
-  ];
-
   return (
-    <div>
-      <Header />
+    <div style={{ padding: 20 }}>
+      <Typography.Title level={2}>Danh mục</Typography.Title>
+
       <Table
-        dataSource={data}
-        columns={columns}
-        rowKey={"id"}
         loading={isLoading}
+        dataSource={categories}
+        rowKey="id"
+        columns={[
+          { title: 'ID', dataIndex: 'id', width: 60 },
+          { title: 'Tên danh mục', dataIndex: 'name' },
+          { title: 'Mô tả', dataIndex: 'description' },
+        ]}
       />
     </div>
   );
-}
+};
 
-export default CategoryList;
+export default CategoryManager;

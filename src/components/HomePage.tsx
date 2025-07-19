@@ -3,7 +3,7 @@ import Header from '../layouts/Header'
 
 const HomePage = () => {
   return (
-    <div>
+    <div style={{width: '100%'}}>
         <Header />
     </div>
   )
