@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Table, Button, Spin, Alert } from "antd";
 import axios from "axios";
@@ -11,19 +11,19 @@ interface Product {
   description: string;
 }
 
-const [searchParam] = useSearchParams();
-console.log(searchParam);
-const name = searchParam.get('name');
-console.log(name);
-
-
-const fetchProducts = async (): Promise<Product[]> => {
-  const { data } = await axios.get(`http://localhost:3001/products?name_like=${name || ""}`);
-  console.log(data); 
-  return data;
-};
-
 const ProductList: React.FC = () => {
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log(searchParams);
+  // const name = searchParams.get('name');
+  const [name, setName] = useState();
+  console.log(name);
+
+  const fetchProducts = async (): Promise<Product[]> => {
+    const { data } = await axios.get(`http://localhost:3001/products?name_like=${name || ""}`);
+    console.log(data);
+    return data;
+  };
   const {
     data: products,
     isLoading,
@@ -40,8 +40,8 @@ const ProductList: React.FC = () => {
       dataIndex: "id",
       key: "id",
       sorter: (a: Product, b: Product) => a.id - b.id,
-        render: (id: number) => {
-        return <Link to={`/product/detail/${id}`}>ID: {id}</Link>; 
+      render: (id: number) => {
+        return <Link to={`/product/detail/${id}`}>ID: {id}</Link>;
       },
     },
     {
@@ -71,6 +71,10 @@ const ProductList: React.FC = () => {
     },
   ];
 
+  const searchName = () => {
+    refetch();
+  }
+
   if (error) {
     return (
       <Alert
@@ -85,6 +89,9 @@ const ProductList: React.FC = () => {
   return (
     <div>
       <h2>Danh sách sản phẩm</h2>
+      <input style={{width: '300px', background: 'black'}} type="text" title="Tìm kiếm theo Tên"
+      onChange={(e) => setName(e.target.value)}/>
+      <button onClick={searchName}>Tìm</button>
       <Table
         dataSource={products}
         columns={columns}
