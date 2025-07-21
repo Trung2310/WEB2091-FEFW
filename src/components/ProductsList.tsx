@@ -2,8 +2,8 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Table, Button, Spin, Alert } from "antd";
 import axios from "axios";
+import { Link, useSearchParams } from "react-router-dom";
 
-// Định nghĩa interface cho sản phẩm
 interface Product {
   id: number;
   name: string;
@@ -11,43 +11,50 @@ interface Product {
   description: string;
 }
 
-// Hàm gọi API để lấy danh sách sản phẩm
+const [searchParam] = useSearchParams();
+console.log(searchParam);
+const name = searchParam.get('name');
+console.log(name);
+
+
 const fetchProducts = async (): Promise<Product[]> => {
-  const { data } = await axios.get("http://localhost:3001/products");
+  const { data } = await axios.get(`http://localhost:3001/products?name_like=${name || ""}`);
+  console.log(data); 
   return data;
 };
 
 const ProductList: React.FC = () => {
-  // Sử dụng useQuery để lấy dữ liệu
   const {
     data: products,
     isLoading,
     error,
     refetch,
   } = useQuery({
-    queryKey: ["products"], // Khóa duy nhất cho truy vấn
-    queryFn: fetchProducts, // Hàm lấy dữ liệu
+    queryKey: ["products"],
+    queryFn: fetchProducts,
   });
 
-  // Cấu hình cột cho bảng AntD
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
       key: "id",
-      sorter: (a: Product, b: Product) => a.id - b.id, // Sắp xếp theo ID
+      sorter: (a: Product, b: Product) => a.id - b.id,
+        render: (id: number) => {
+        return <Link to={`/product/detail/${id}`}>ID: {id}</Link>; 
+      },
     },
     {
       title: "Tên sản phẩm",
       dataIndex: "name",
       key: "name",
-      sorter: (a: Product, b: Product) => a.name.localeCompare(b.name), // Sắp xếp theo tên
+      sorter: (a: Product, b: Product) => a.name.localeCompare(b.name),
     },
     {
       title: "Giá",
       dataIndex: "price",
       key: "price",
-      sorter: (a: Product, b: Product) => a.price - b.price, // Sắp xếp theo giá
+      sorter: (a: Product, b: Product) => a.price - b.price,
     },
     {
       title: "Hình Ảnh",
@@ -64,7 +71,6 @@ const ProductList: React.FC = () => {
     },
   ];
 
-  // Xử lý lỗi
   if (error) {
     return (
       <Alert
@@ -83,8 +89,8 @@ const ProductList: React.FC = () => {
         dataSource={products}
         columns={columns}
         rowKey="id"
-        loading={isLoading} // Hiển thị spinner khi đang tải
-        pagination={{ pageSize: 5 }} // Phân trang, mỗi trang 5 bản ghi
+        loading={isLoading}
+        pagination={{ pageSize: 5 }}
       />
     </div>
   );

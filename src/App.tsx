@@ -6,6 +6,7 @@ import HomePage from './components/HomePage';
 import CategoryList from './components/CategoryList';
 import BrandsList from './components/BrandsList';
 import OrderList from './components/OrderList';
+import { ProductDetail } from './components/ProductDetail';
 
 function App() {
   const router = createBrowserRouter(
@@ -17,6 +18,10 @@ function App() {
           {
             path: '/products',
             element: <ProductList />
+          },
+          {
+            path: "/product/detail/:productId",
+            element: <ProductDetail />,
           },
           {
             path: '/users',
