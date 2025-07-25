@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Table, Button, Spin, Alert } from "antd";
 import axios from "axios";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 interface Product {
   id: number;
@@ -18,6 +18,7 @@ const ProductList: React.FC = () => {
   // const name = searchParams.get('name');
   const [name, setName] = useState();
   console.log(name);
+  const nav = useNavigate();
 
   const fetchProducts = async (): Promise<Product[]> => {
     const { data } = await axios.get(`http://localhost:3001/products?name_like=${name || ""}`);
@@ -30,7 +31,7 @@ const ProductList: React.FC = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", name],
     queryFn: fetchProducts,
   });
 
@@ -75,6 +76,10 @@ const ProductList: React.FC = () => {
     refetch();
   }
 
+  const handleAdd = () => {
+    nav('/product/add');
+  }
+
   if (error) {
     return (
       <Alert
@@ -88,9 +93,14 @@ const ProductList: React.FC = () => {
 
   return (
     <div>
-      <h2>Danh sách sản phẩm</h2>
-      <input style={{width: '300px', background: 'black'}} type="text" title="Tìm kiếm theo Tên"
-      onChange={(e) => setName(e.target.value)}/>
+      <h2 style={{color: 'black'}}>Danh sách sản phẩm</h2>
+      <div style={{ textAlign: 'right', marginBottom: 16 }}>
+        <Button type="primary" onClick={handleAdd}>
+          Thêm sản phẩm
+        </Button>
+      </div>
+      <input style={{ width: '300px' }} type="text" title="Tìm kiếm theo Tên"
+        onChange={(e) => setName(e.target.value)} />
       <button onClick={searchName}>Tìm</button>
       <Table
         dataSource={products}

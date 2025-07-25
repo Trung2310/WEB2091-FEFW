@@ -30,7 +30,7 @@
         41,
         42
       ],
-      "image": "https://example.com/images/nike-pegasus.jpg",
+      "image": "https://picsum.dev/300/200",
       "stock": 10,
       "description": "Giày chạy bộ nhẹ, êm, đàn hồi tốt.",
       "isAvailable": true
@@ -49,7 +49,7 @@
         42,
         43
       ],
-      "image": "https://example.com/images/adidas-ultraboost.jpg",
+      "image": "https://picsum.dev/300/200",
       "stock": 15,
       "description": "Giày hiệu suất cao với đệm Boost.",
       "isAvailable": true
@@ -68,10 +68,22 @@
         39,
         40
       ],
-      "image": "https://example.com/images/converse-chuck.jpg",
+      "image": "https://picsum.dev/300/200",
       "stock": 20,
       "description": "Phong cách cổ điển, phù hợp nhiều loại trang phục.",
       "isAvailable": true
+    },
+    {
+      "name": "âdss",
+      "price": 222,
+      "description": "www",
+      "category": "product2",
+      "id": "AoME6Yt"
+    },
+    {
+      "name": "sss",
+      "price": 2222,
+      "id": "cp6IKbY"
     }
   ],
   "categories": [
